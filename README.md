@@ -3,16 +3,16 @@ Chip8 interpreter in C++.
 
 ## Setup
 ```
-conan install . --build=missing -s build_type=Debug
+nix develop
 ```
 
 ## Configure and Build
 ```
-cmake --preset conan-debug
-cmake --build --preset conan-debug
+cmake -B build -S .
+cmake --build build
 ```
 
 ## Run
 ```
-./build/Debug/chipati
+./build/chipati
 ```

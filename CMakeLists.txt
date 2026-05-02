@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 4.2.3)
+cmake_minimum_required(VERSION 4.1.2)
 project(chipati CXX)
 
-set(CMAKE_CXX_COMPILER clang)
+set(CMAKE_CXX_COMPILER clang++)
 
 find_package(SDL3 REQUIRED)
 find_package(SDL3_image REQUIRED)
