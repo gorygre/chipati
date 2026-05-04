@@ -11,7 +11,6 @@
           clang
           cmake
           sdl3
-          sdl3-image
         ];
       };
     };
