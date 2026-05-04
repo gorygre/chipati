@@ -11,20 +11,35 @@ struct AppState {
 };
 
 SDL_AppResult SDL_AppInit(void** appstate, int argc, char** argv) {
-  SDL_InitSubSystem(SDL_INIT_VIDEO);
+  if (!SDL_InitSubSystem(SDL_INIT_VIDEO)) {
+    SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "Startup error initializing SDL subsystems: %s", SDL_GetError());
+    return SDL_APP_FAILURE;
+  }
 
   auto state = static_cast<AppState*>(SDL_malloc(sizeof(AppState)));
+  if (!state) {
+    return SDL_APP_FAILURE;
+  }
 
   state->window = SDL_CreateWindow("Smiley", 640, 480, SDL_WINDOW_RESIZABLE);
+  if (!state->window) {
+    SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "Could not create window: %s", SDL_GetError());
+    return SDL_APP_FAILURE;
+  }
 
   // let SDL choose the rendering backend
   state->renderer = SDL_CreateRenderer(state->window, nullptr);
+  if (!state->renderer) {
+    SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "Error selecting rendering backend: %s", SDL_GetError());
+    return SDL_APP_FAILURE;
+  }
 
   SDL_Surface* smiley = IMG_Load("dist/smiley.png");
   state->texture = SDL_CreateTextureFromSurface(state->renderer, smiley);
   SDL_DestroySurface(smiley);
   smiley = nullptr;
 
+  SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Initialization complete");
   *appstate = state;
   return SDL_APP_CONTINUE;
 }
